@@ -24,7 +24,7 @@ export const routes: Routes = [
         component: ContactComponent
     },
     {
-        path: 'about',
+        path: 'aboutus',
         component: AboutComponent
     },
     {
