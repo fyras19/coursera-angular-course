@@ -7,9 +7,9 @@
     </div>
 </div> -->
 <div class="container" fxLayout="row" fxLayout.sm="column" fxLayout.xs="column"
-  fxLayoutAlign.gt-md="space-around center" fxLayoutGap="10px" fxLayoutGap.xs="0">
+  fxLayoutAlign.gt-md="space-around center" fxLayoutGap="10px" fxLayoutGap.xs="0" *ngIf="dish">
 
-  <div fxFlex="40" *ngIf="dish">
+  <div fxFlex="40">
     <mat-card>
       <mat-card-header>
         <mat-card-title>
@@ -22,14 +22,17 @@
         </p>
       </mat-card-content>
       <mat-card-actions>
+        <button mat-button [routerLink]="['/dishdetail', prev]"><i class="fa fa-chevron-left fa-lg" aria-hidden="true"></i></button>
         <button mat-button (click)="goBack()">BACK</button>
         <button mat-button>LIKE</button>
         <button mat-button>SHARE</button>
+        <span class="flex-spacer"></span>
+        <button mat-button [routerLink]="['/dishdetail', next]"><i class="fa fa-chevron-right fa-lg" aria-hidden="true"></i></button>
       </mat-card-actions>
     </mat-card>
   </div>
 
-  <div fxFlex="40" *ngIf="dish">
+  <div fxFlex="40">
     <h1>Comments</h1>
     <mat-list>
       <mat-list-item *ngFor="let comment of dish.comments">
@@ -44,10 +47,10 @@
       </mat-list-item>
     </mat-list>
   </div>
-  <div [hidden]="dish">
-    <mat-spinner>
-    </mat-spinner>
-    <h4>Loading... Please Wait</h4>
-  </div>
+</div>
 
+<div [hidden]="dish">
+  <mat-spinner>
+  </mat-spinner>
+  <h4>Loading... Please Wait</h4>
 </div>
