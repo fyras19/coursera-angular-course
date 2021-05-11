@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
@@ -41,7 +41,8 @@ export class DishdetailComponent implements OnInit {
   constructor(private dishService: DishService,
     private location: Location,
     private route: ActivatedRoute,
-    private fb: FormBuilder) {
+    private fb: FormBuilder,
+    @Inject('BaseURL') private baseURL) {
     this.createForm();
     this.newComment = {
       author: '',
