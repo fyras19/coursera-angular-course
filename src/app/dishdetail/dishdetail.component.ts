@@ -21,6 +21,7 @@ export class DishdetailComponent implements OnInit {
   prev: string;
   next: string;
   newComment: Comment;
+  errMess: string;
   @ViewChild('fform') commentFormDirective;
 
   formErrors = {
@@ -53,13 +54,15 @@ export class DishdetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dishService.getDishIds().subscribe((ids: string[]) => this.dishIds = ids);
+    this.dishService.getDishIds()
+      .subscribe((ids: string[]) => this.dishIds = ids);
     this.route.params
       .pipe(switchMap((params: Params) => this.dishService.getDish(params['id'])))
       .subscribe((dish) => {
         this.dish = dish;
         this.setPrevNext(dish.id);
-      });
+      },
+        errmess => this.errMess = <any>errmess);
   }
 
   setPrevNext(dishId: string): void {
@@ -81,7 +84,7 @@ export class DishdetailComponent implements OnInit {
 
     this.commentForm.valueChanges
       .subscribe(data => this.onValueChanges(data));
-    
+
     this.onValueChanges();
   }
 
@@ -100,18 +103,18 @@ export class DishdetailComponent implements OnInit {
   }
 
   onValueChanges(data?): void {
-    if(!this.commentForm) return;
+    if (!this.commentForm) return;
     console.log(this.formErrors);
     const form = this.commentForm;
-    for(const field in this.formErrors){
-      if(this.formErrors.hasOwnProperty(field)){
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
         this.formErrors[field] = '';
         const control = form.get(field);
-        if(control && control.dirty && control.invalid){
+        if (control && control.dirty && control.invalid) {
           const messages = this.validationMessages[field];
-          for(const message in messages){
-            if(control.errors.hasOwnProperty(message))
-              this.formErrors[field] += messages[message] + ' '; 
+          for (const message in messages) {
+            if (control.errors.hasOwnProperty(message))
+              this.formErrors[field] += messages[message] + ' ';
           }
         }
       }
