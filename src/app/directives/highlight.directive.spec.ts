@@ -1,4 +1,4 @@
-import { HighlightDirective } from './highlight.directive';
+/* import { HighlightDirective } from './highlight.directive';
 
 describe('HighlightDirective', () => {
   it('should create an instance', () => {
@@ -6,3 +6,4 @@ describe('HighlightDirective', () => {
     expect(directive).toBeTruthy();
   });
 });
+ */
