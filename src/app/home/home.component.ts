@@ -7,6 +7,7 @@ import { PromotionService } from '../services/promotion.service';
 import { Leader } from '../shared/leader';
 import { LeaderService } from '../services/leader.service';
 import { expand, flyInOut } from '../animations/app.animation';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -24,6 +25,8 @@ export class HomeComponent implements OnInit {
 
   dish: Dish;
   dishErrMess: string;
+  promotionErrMess: string;
+  leaderErrMess: string;
   promotion: Promotion;
   leader: Leader;
 
@@ -37,8 +40,12 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.promotionService.getFeaturedPromotion().subscribe((promotion) => this.promotion = promotion);
-    this.leaderService.getFeaturedLeader().subscribe((leader) => this.leader = leader);
+    this.promotionService.getFeaturedPromotion().
+      subscribe((promotion) => this.promotion = promotion,
+        errmess => this.promotionErrMess = <any>errmess);
+    this.leaderService.getFeaturedLeader().
+      subscribe((leader) => this.leader = leader,
+      errmess => this.leaderErrMess = <any>errmess);
   }
 
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { flyInOut } from '../animations/app.animation';
 import { Feedback, ContactType } from '../shared/feedback';
+import { FeedbackService } from '../services/feedback.service';
 
 @Component({
   selector: 'app-contact',
@@ -21,6 +22,9 @@ export class ContactComponent implements OnInit {
   feedbackForm: FormGroup;
   feedback: Feedback;
   contactType = ContactType;
+  errMess: string;
+  feedbackSubmitted: boolean;
+  submittedFeedback: Feedback; 
   @ViewChild('fform') feedbackFormDirective;
 
   formErrors = {
@@ -51,9 +55,11 @@ export class ContactComponent implements OnInit {
     }
   };
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private feedbackService: FeedbackService) {
     this.feedback = new Feedback();
     this.createForm();
+    this.feedbackSubmitted = false;
   }
 
   ngOnInit(): void {
@@ -77,19 +83,19 @@ export class ContactComponent implements OnInit {
 
   }
 
-  
-  onValueChanged(data?: any){
-    if(!this.feedbackForm) return;
+
+  onValueChanged(data?: any) {
+    if (!this.feedbackForm) return;
     const form = this.feedbackForm;
-    for(const field in this.formErrors){
-      if(this.formErrors.hasOwnProperty(field)){
+    for (const field in this.formErrors) {
+      if (this.formErrors.hasOwnProperty(field)) {
         //clear previous error messages (if any)
         this.formErrors[field] = '';
         const control = form.get(field);
-        if(control && control.dirty && !control.valid){
+        if (control && control.dirty && !control.valid) {
           const messages = this.validationMessages[field];
-          for(const key in control.errors){
-            if(control.errors.hasOwnProperty(key)){
+          for (const key in control.errors) {
+            if (control.errors.hasOwnProperty(key)) {
               this.formErrors[field] += messages[key] + ' ';
             }
           }
@@ -100,7 +106,16 @@ export class ContactComponent implements OnInit {
 
   onSubmit(): void {
     this.feedback = this.feedbackForm.value;
-    console.log(this.feedback);
+    this.feedbackSubmitted = true;
+    this.feedbackService.submitFeedback(this.feedback)
+      .subscribe((feedback: Feedback) => {
+        this.submittedFeedback = feedback;
+        setTimeout(() => {
+          this.feedbackSubmitted = false;
+          this.submittedFeedback = null;
+        }, 5000);
+      },
+        errmess => this.errMess = <any>errmess);
     this.feedbackForm.reset({
       firstname: '',
       lastname: '',
